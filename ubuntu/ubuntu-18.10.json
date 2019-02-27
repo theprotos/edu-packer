@@ -154,7 +154,6 @@
       "ssh_port": 22,
       "ssh_username": "vagrant",
       "ssh_wait_timeout": "10000s",
-      "type": "qemu",
       "vm_name": "{{ user `template` }}",
       "qemuargs": [
         [
@@ -185,7 +184,10 @@
       "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E sh -eux '{{.Path}}'",
       "expect_disconnect": true,
       "scripts": [
-        "scripts/update.sh"
+        "scripts/update.sh",
+        "scripts/networking.sh",
+        "scripts/sudoers.sh",
+        "scripts/cleanup.sh"
       ],
       "type": "shell"
     }
