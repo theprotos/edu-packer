@@ -76,7 +76,19 @@
       ]
     }
   ],
-  "provisioners": [
+  "provisioners": [{
+    "type": "chef-solo",
+    "cookbook_paths": ["cookbooks"],
+    "guest_os_type": "windows",
+    "run_list": [
+      "packer::disable_uac",
+      "packer::disable_onedrive",
+      "packer::disable_restore",
+      "packer::disable_hibernation",
+      "packer::disable_windows_update",
+      "packer::remove_defender"
+    ]
+  }
   ],
   "post-processors": [
     [
