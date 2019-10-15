@@ -1,4 +1,14 @@
 {
+  "variables": {
+    "artifacts_path": "boxes",
+    "iso_checksum": "34887592ECC25B725A527748D31971F22C78C82B",
+    "iso_path": "D:\\home\\downloads\\windows10\\windows10.iso",
+    "guest_additions_mode": "attach",
+    "headless": "false",
+    "autounattend": "answer_files/win10ent/Autounattend.xml",
+    "template": "windows-10"
+  },
+
   "builders": [
     {
       "type": "vmware-iso",
@@ -10,8 +20,7 @@
       },
       "guest_os_type": "windows9srv-64",
       "headless": "{{ user `headless` }}",
-      "iso_url": "{{ user `iso_mirror` }}/{{user `iso_name`}}",
-      "iso_target_path": "{{user `iso_path`}}/{{user `iso_name`}}",
+      "iso_url": "{{ user `iso_path` }}",
       "iso_checksum": "{{ user `iso_checksum` }}",
       "iso_checksum_type": "sha1",
       "output_directory": "{{user `artifacts_path`}}/packer-{{user `template`}}-vmware",
@@ -45,13 +54,19 @@
           "modifyvm",
           "{{.Name}}",
           "--cpus",
-          "3"
+          "2"
         ],
         [
           "modifyvm",
           "{{.Name}}",
           "--audio",
           "none"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--clipboard",
+          "bidirectional"
         ]
       ],
       "guest_additions_mode": "{{ user `guest_additions_mode` }}",
@@ -59,8 +74,7 @@
       "guest_os_type": "Windows10_64",
       "hard_drive_interface": "sata",
       "headless": "{{ user `headless` }}",
-      "iso_url": "{{ user `iso_mirror` }}/{{user `iso_name`}}",
-      "iso_target_path": "{{user `iso_path`}}/{{user `iso_name`}}",
+      "iso_url": "{{ user `iso_path` }}",
       "iso_checksum": "{{ user `iso_checksum` }}",
       "iso_checksum_type": "sha1",
       "output_directory": "{{user `artifacts_path`}}/packer-{{user `template`}}-virtualbox",
@@ -72,7 +86,8 @@
       "shutdown_timeout": "15m",
       "floppy_files": [
         "{{user `autounattend`}}",
-        "scripts/base_setup.ps1"
+        "scripts/base_setup.ps1",
+        "scripts/oracle.cer"
       ]
     }
   ],
@@ -99,16 +114,6 @@
         "vagrantfile_template": "vagrantfile-windows.template"
       }
     ]
-  ],
-  "variables": {
-    "artifacts_path": "boxes",
-    "iso_path": "iso",
-    "guest_additions_mode": "attach",
-    "headless": "false",
-    "autounattend": "answer_files/win10ent/Autounattend.xml",
-    "iso_checksum": "34887592ECC25B725A527748D31971F22C78C82B",
-    "iso_mirror": "D:\\home\\downloads\\windows10",
-    "iso_name": "windows10.iso",
-    "template": "windows-10"
-  }
+  ]
+
 }
