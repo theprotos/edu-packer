@@ -4,7 +4,7 @@
       "type": "vmware-iso",
       "vmx_data": {
         "memsize": "4096",
-        "numvcpus": "2",
+        "numvcpus": "3",
         "scsi0.virtualDev": "lsisas1068",
         "scsi0.present": "TRUE"
       },
@@ -22,7 +22,8 @@
       "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
       "shutdown_timeout": "15m",
       "floppy_files": [
-        "config-10/Autounattend.xml"
+        "{{user `autounattend`}}",
+        "scripts/base_setup.ps1"
       ]
     },
     {
@@ -44,7 +45,7 @@
           "modifyvm",
           "{{.Name}}",
           "--cpus",
-          "2"
+          "3"
         ],
         [
           "modifyvm",
@@ -70,7 +71,7 @@
       "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
       "shutdown_timeout": "15m",
       "floppy_files": [
-        "answer_file/Autounattend.xml",
+        "{{user `autounattend`}}",
         "scripts/base_setup.ps1"
       ]
     }
@@ -78,12 +79,21 @@
   "provisioners": [
   ],
   "post-processors": [
+    [
+      {
+        "type": "vagrant",
+        "keep_input_artifact": true,
+        "output": "{{ user `template` }}-{{.Provider}}.box",
+        "vagrantfile_template": "vagrantfile-windows.template"
+      }
+    ]
   ],
   "variables": {
     "artifacts_path": "boxes",
     "iso_path": "iso",
     "guest_additions_mode": "attach",
     "headless": "false",
+    "autounattend": "answer_files/win10ent/Autounattend.xml",
     "iso_checksum": "34887592ECC25B725A527748D31971F22C78C82B",
     "iso_mirror": "D:\\home\\downloads\\windows10",
     "iso_name": "windows10.iso",
